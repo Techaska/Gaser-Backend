@@ -1,9 +1,6 @@
 package com.P1.Gaser.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,11 +21,11 @@ public class ServiceCenter {
     @NotBlank(message = "Service center name is required")
     private String serviceCenterName;
 
-    @NotBlank(message = "Address is required")
-    private String address;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
 
-    @NotBlank(message = "Phone number is required")
-    private String phoneNumber;
-
-    private String email;
+    @OneToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
 }

@@ -36,29 +36,27 @@ public class ServiceCenterService {
             ServiceCenter serviceCenter) {
 
         ServiceCenter existingServiceCenter =
-                serviceCenterRepository.findById(id).orElse(null);
+                serviceCenterRepository.findById(id)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Service center not found with id: " + id));
 
-        if (existingServiceCenter != null) {
+        existingServiceCenter.setServiceCenterName(
+                serviceCenter.getServiceCenterName());
 
-            existingServiceCenter.setServiceCenterName(
-                    serviceCenter.getServiceCenterName());
+        existingServiceCenter.setAddress(
+                serviceCenter.getAddress());
 
-            existingServiceCenter.setAddress(
-                    serviceCenter.getAddress());
-
-            existingServiceCenter.setPhoneNumber(
-                    serviceCenter.getPhoneNumber());
-
-            existingServiceCenter.setEmail(
-                    serviceCenter.getEmail());
-
-            return serviceCenterRepository.save(existingServiceCenter);
-        }
-
-        return null;
+        return serviceCenterRepository.save(existingServiceCenter);
     }
 
     public void deleteServiceCenter(Long id) {
+
+        if (!serviceCenterRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    "Service center not found with id: " + id);
+        }
+
         serviceCenterRepository.deleteById(id);
     }
 }

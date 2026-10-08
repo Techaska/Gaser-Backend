@@ -20,6 +20,7 @@ public class Vehicle {
     private Long vehicleId;
 
     @NotBlank(message = "Vehicle number is required")
+    @Column(unique = true, nullable = false)
     private String vehicleNumber;
 
     @NotBlank(message = "Vehicle brand is required")
